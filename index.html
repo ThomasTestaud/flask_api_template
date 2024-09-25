@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POSTMADE</title>
+</head>
+
+<body>
+    <script>
+        fetch('http://127.0.0.1:5000/get_new_settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "temperature": 100,
+                "vitesse": 1200,
+                "pression": 30
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const score = (data.temperature - 150) / 100
+                console.log(score)
+
+                fetch('http://127.0.0.1:5000/feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({reward: score})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    })
+                    .catch(error => console.error('Error:', error));
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+
+</html>
